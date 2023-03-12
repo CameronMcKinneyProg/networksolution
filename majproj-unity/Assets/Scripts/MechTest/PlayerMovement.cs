@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Update()
     {
-        
-    }
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Vector3 moveDir = transform.right * x + transform.forward * z;
+
+
     }
 }
