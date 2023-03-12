@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private CharacterController controller;
+    [SerializeField] private float speed = 12f;
+
     private void Update()
     {
         float x = Input.GetAxis("Horizontal");
@@ -11,6 +14,6 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveDir = transform.right * x + transform.forward * z;
 
-
+        controller.Move(moveDir * speed * Time.deltaTime);
     }
 }
