@@ -493,7 +493,6 @@ GameObject:
   - component: {fileID: 1370207532}
   - component: {fileID: 1370207535}
   - component: {fileID: 1370207534}
-  - component: {fileID: 1370207533}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -510,26 +509,12 @@ Transform:
   m_GameObject: {fileID: 1370207531}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.8, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 549895393}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1370207533
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1370207531}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1370207534
 MeshRenderer:
   m_ObjectHideFlags: 0
