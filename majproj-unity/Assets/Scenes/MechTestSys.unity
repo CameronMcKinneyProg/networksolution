@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 14051440}
   - component: {fileID: 14051439}
   - component: {fileID: 14051438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 96384224}
   - component: {fileID: 96384223}
   - component: {fileID: 96384222}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 326623184}
   - component: {fileID: 326623183}
   - component: {fileID: 326623182}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,6 +515,11 @@ MonoBehaviour:
   controller: {fileID: 549895394}
   speed: 12
   gravity: -9.81
+  groundCheck: {fileID: 149479140}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +722,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1364046904}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Environment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -840,7 +845,7 @@ GameObject:
   - component: {fileID: 1803204189}
   - component: {fileID: 1803204188}
   - component: {fileID: 1803204187}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -937,7 +942,7 @@ GameObject:
   - component: {fileID: 1982958436}
   - component: {fileID: 1982958435}
   - component: {fileID: 1982958434}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,7 +1039,7 @@ GameObject:
   - component: {fileID: 2074838674}
   - component: {fileID: 2074838673}
   - component: {fileID: 2074838672}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
