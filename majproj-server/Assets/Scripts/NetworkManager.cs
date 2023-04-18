@@ -40,18 +40,15 @@ public class NetworkManager : MonoBehaviour
         return Instantiate(playerPrefab, new Vector3(0f, 0.5f, 0f), Quaternion.identity).GetComponent<Player>();
     }
 
-    public void InstantiateEnemy(Vector3 _position)
+    public Enemy InstantiateEnemy(Vector3 _position)
     {
-        Instantiate(enemyPrefab, _position, Quaternion.identity);
+        return Instantiate(enemyPrefab, _position, Quaternion.identity).GetComponent<Enemy>();
     }
 
     public Projectile InstantiateProjectile(Transform _shootOrigin)
     {
         // multiply by 0.7f to avoid exploding on player that throws this projectile.
         // TODO: in Projectile.cs: check colliders against thrownByPlayer's collider before exploding.
-        return Instantiate(
-            projectilePrefab,
-            _shootOrigin.position + _shootOrigin.forward * 0.7f,
-            Quaternion.identity).GetComponent<Projectile>();
+        return Instantiate(projectilePrefab, _shootOrigin.position + _shootOrigin.forward * 0.7f, Quaternion.identity).GetComponent<Projectile>();
     }
 }
