@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public PlayerManager player;
-    public float sensitivity = 100f;
+    public float mouseSensitivity = 100f;
     public float clampAngle = 85f;
 
     private float verticalRotation;
@@ -36,8 +36,8 @@ public class CameraController : MonoBehaviour
         float _mouseVertical = -Input.GetAxis("Mouse Y");
         float _mouseHorizontal = Input.GetAxis("Mouse X");
 
-        verticalRotation += _mouseVertical * sensitivity * Time.deltaTime;
-        horizontalRotation += _mouseHorizontal * sensitivity * Time.deltaTime;
+        verticalRotation += _mouseVertical * mouseSensitivity * Time.deltaTime;
+        horizontalRotation += _mouseHorizontal * mouseSensitivity * Time.deltaTime;
 
         verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
 
