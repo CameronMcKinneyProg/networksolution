@@ -148,6 +148,7 @@ public class Client
         }
     }*/
 
+    /*
     public class UDP
     {
         public IPEndPoint endPoint;
@@ -188,7 +189,7 @@ public class Client
         {
             endPoint = null;
         }
-    }
+    }*/
 
     public void SendIntoGame(string _playerName)
     {

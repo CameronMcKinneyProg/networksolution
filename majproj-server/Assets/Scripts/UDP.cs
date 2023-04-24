@@ -1,18 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Net;
+using System.Net.Sockets;
 
-public class UDP : MonoBehaviour
+public class UDP
 {
-    // Start is called before the first frame update
-    void Start()
+    public IPEndPoint endPoint;
+
+    private int id;
+
+    public UDP(int _id)
     {
-        
+        id = _id;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Connect(IPEndPoint _endPoint)
     {
-        
+        endPoint = _endPoint;
+    }
+
+    public void SendData(Packet _packet)
+    {
+        Server.SendUDPData(endPoint, _packet);
+    }
+
+    public void HandleData(Packet _packetData)
+    {
+        int _packetLength = _packetData.ReadInt();
+        byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
+
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+            using (Packet _packet = new Packet(_packetBytes))
+            {
+                int _packetId = _packet.ReadInt();
+                Server.packetHandlers[_packetId](id, _packet);
+            }
+        });
+    }
+
+    public void Disconnect()
+    {
+        endPoint = null;
     }
 }
