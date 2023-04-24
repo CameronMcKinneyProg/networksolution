@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 public class Client
 {
-    public static int dataBufferSize = 4096;
+    public static int tcpDataBufferSize = 4096;
 
     public int id;
     public Player player;
@@ -17,10 +17,11 @@ public class Client
     public Client(int _clientId)
     {
         id = _clientId;
-        tcp = new TCP(id);
+        tcp = new TCP(id, tcpDataBufferSize);
         udp = new UDP(id);
     }
 
+    /*
     public class TCP
     {
         public TcpClient socket;
@@ -145,7 +146,7 @@ public class Client
             receiveBuffer = null;
             socket = null;
         }
-    }
+    }*/
 
     public class UDP
     {
@@ -226,7 +227,7 @@ public class Client
         }
     }
 
-    private void Disconnect()
+    public void Disconnect()
     {
         Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
