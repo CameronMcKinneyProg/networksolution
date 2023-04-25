@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
     private static int nextProjectileId = 1;
+    private static int debugLastExplodedId = 0;
 
     public int id;
     public Rigidbody rigidBody;
@@ -45,7 +46,13 @@ public class Projectile : MonoBehaviour
 
     private void Explode()
     {
-        Debug.Log($"#{id}: Explode().");
+        if (debugLastExplodedId == id)
+        {
+            //Time.timeScale = 0f; //debug
+            Debug.LogWarning($"Explode() has already been called for projectile #{id}.");
+            return;
+        }
+
         ServerSend.ProjectileExploded(this);
 
         Collider[] _colliders = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -61,6 +68,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
+        debugLastExplodedId = id;
         projectiles.Remove(id);
         Destroy(gameObject);
         Debug.Log($"#{id} destroyed.");

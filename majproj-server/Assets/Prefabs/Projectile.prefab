@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1772020743189739507
 MeshFilter:
@@ -131,5 +131,5 @@ MonoBehaviour:
   rigidBody: {fileID: 5867089745498395862}
   thrownByPlayer: 0
   initialForce: {x: 0, y: 0, z: 0}
-  explosionRadius: 1.75
+  explosionRadius: 1.5
   explosionDamage: 75
