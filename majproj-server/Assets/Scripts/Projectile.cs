@@ -33,6 +33,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log($"#{id}: {collision.transform.name} collision called Explode().");
         Explode();
     }
 
@@ -44,6 +45,7 @@ public class Projectile : MonoBehaviour
 
     private void Explode()
     {
+        Debug.Log($"#{id}: Explode().");
         ServerSend.ProjectileExploded(this);
 
         Collider[] _colliders = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -61,12 +63,13 @@ public class Projectile : MonoBehaviour
 
         projectiles.Remove(id);
         Destroy(gameObject);
+        Debug.Log($"#{id} destroyed.");
     }
 
     private IEnumerator ExplodeAfterSeconds(float _seconds)
     {
         yield return new WaitForSeconds(_seconds);
-
+        Debug.Log($"#{id}: ExplodeAfterSeconds() coroutine called Explode().");
         Explode();
     }
 }
