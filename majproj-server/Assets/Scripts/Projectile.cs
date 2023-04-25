@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
     private static int nextProjectileId = 1;
-    private static int debugLastExplodedId = 0;
+    private static int lastExplodedId = 0;
 
     public int id;
     public Rigidbody rigidBody;
@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
 
     private void Explode()
     {
-        if (debugLastExplodedId == id)
+        if (lastExplodedId == id)
         {
             //Time.timeScale = 0f; //debug
             //Debug.LogWarning($"Explode() has already been called for projectile #{id}.");
@@ -68,7 +68,7 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        debugLastExplodedId = id;
+        lastExplodedId = id;
         projectiles.Remove(id);
         Destroy(gameObject);
         //Debug.Log($"#{id} destroyed.");
