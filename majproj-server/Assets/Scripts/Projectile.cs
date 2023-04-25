@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"#{id}: {collision.transform.name} collision called Explode().");
+        //Debug.Log($"#{id}: {collision.transform.name} collision called Explode().");
         Explode();
     }
 
@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
         if (debugLastExplodedId == id)
         {
             //Time.timeScale = 0f; //debug
-            Debug.LogWarning($"Explode() has already been called for projectile #{id}.");
+            //Debug.LogWarning($"Explode() has already been called for projectile #{id}.");
             return;
         }
 
@@ -71,13 +71,13 @@ public class Projectile : MonoBehaviour
         debugLastExplodedId = id;
         projectiles.Remove(id);
         Destroy(gameObject);
-        Debug.Log($"#{id} destroyed.");
+        //Debug.Log($"#{id} destroyed.");
     }
 
     private IEnumerator ExplodeAfterSeconds(float _seconds)
     {
         yield return new WaitForSeconds(_seconds);
-        Debug.Log($"#{id}: ExplodeAfterSeconds() coroutine called Explode().");
+        //Debug.Log($"#{id}: ExplodeAfterSeconds() coroutine called Explode().");
         Explode();
     }
 }

@@ -210,7 +210,7 @@ public class ServerSend
             _packet.Write(_projectile.transform.position);
 
             SendTCPDataToAll(_packet);
-            Debug.Log($"#{_projectile.id}: ProjectileExploded packet sent through TCP.");
+            //Debug.Log($"#{_projectile.id}: ProjectileExploded packet sent through TCP.");
         }
     }
 
