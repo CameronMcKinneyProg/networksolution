@@ -30,6 +30,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+    }
+
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
     {
         GameObject _player;
