@@ -14,11 +14,11 @@ public class ProjectileManager : MonoBehaviour
 
     public void Explode(Vector3 _position)
     {
-        Debug.Log($"#{id}: Explode() called.");
+        //Debug.Log($"#{id}: Explode() called.");
         transform.position = _position;
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         GameManager.projectiles.Remove(id);
         Destroy(gameObject);
-        Debug.Log($"#{id} destroyed.");
+        //Debug.Log($"#{id} destroyed.");
     }
 }

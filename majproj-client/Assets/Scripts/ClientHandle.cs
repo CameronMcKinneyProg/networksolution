@@ -129,7 +129,7 @@ public class ClientHandle : MonoBehaviour
         Vector3 _position = _packet.ReadVector3();
 
         GameManager.projectiles[_projectileId].Explode(_position);
-        Debug.Log($"#{_projectileId}: ProjectileExploded packet received through TCP.");
+        //Debug.Log($"#{_projectileId}: ProjectileExploded packet received through TCP.");
     }
 
     public static void SpawnEnemy(Packet _packet)
