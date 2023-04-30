@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject startMenu;
     public TMP_InputField usernameField;
+    public TMP_Text rttText;
 
     private void Awake()
     {
@@ -22,6 +23,12 @@ public class UIManager : MonoBehaviour
             Debug.Log("UIManager instance already exists, destroying object!");
             Destroy(this);
         }
+    }
+
+    public void UpdateRTTText(double _rtt)
+    {
+        _rtt *= 1000; // conversion from seconds to milliseconds
+        rttText.text = $"RTT: {_rtt}";
     }
 
     public void ConnectToServer()

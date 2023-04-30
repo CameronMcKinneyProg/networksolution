@@ -10,15 +10,21 @@ public class Client : MonoBehaviour
     public static Client instance; // singleton
     public static int dataBufferSize = 4096;
 
-    public string ip = "127.0.0.1";
-    public int port = 29950;
+    public string hostIp = "127.0.0.1";
+    public int hostPort = 29950;
     public int myId = 0;
     public TCP tcp;
     public UDP udp;
+    public double rttUpdatePeriod = 1.0f;
+    public int maxRttsToStore = 10;
 
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
+
+    private double nextRttUpdateTime = 0f;
+    private double pingStartTime = 0f;
+    private List<double> recentRtts;
 
     private void Awake()
     {
@@ -30,6 +36,21 @@ public class Client : MonoBehaviour
         {
             Debug.Log("Client instance already exists, destroying object!");
             Destroy(this);
+        }
+
+        recentRtts = new List<double>();
+    }
+
+    private void Update()
+    {
+        if (isConnected && Time.time > nextRttUpdateTime)
+        {
+            nextRttUpdateTime += rttUpdatePeriod;
+
+            UIManager.instance.UpdateRTTText(CalculateAverageRoundTripTime());
+
+            ClientSend.Ping();
+            SetPingStartTime();
         }
     }
 
@@ -49,6 +70,40 @@ public class Client : MonoBehaviour
         tcp.Connect();
     }
 
+    public void SetPingStartTime()
+    {
+        pingStartTime = Time.realtimeSinceStartupAsDouble;
+    }
+
+    public double PongReceived()
+    {
+        double _rtt = Time.realtimeSinceStartupAsDouble - pingStartTime;
+
+        if (recentRtts.Count < maxRttsToStore)
+        {
+            recentRtts.Add(_rtt);
+        }
+        else
+        {
+            recentRtts.RemoveAt(0);
+            recentRtts.Add(_rtt);
+        }
+
+        return _rtt;
+    }
+
+    private double CalculateAverageRoundTripTime()
+    {
+        double _accumulator = 0f;
+        foreach (double _rtt in recentRtts)
+        {
+            _accumulator += _rtt;
+        }
+
+        double _average = _accumulator / recentRtts.Count;
+        return _average;
+    }
+
     public class TCP
     {
         public TcpClient socket;
@@ -66,7 +121,7 @@ public class Client : MonoBehaviour
             };
 
             receiveBuffer = new byte[dataBufferSize];
-            socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
+            socket.BeginConnect(instance.hostIp, instance.hostPort, ConnectCallback, socket);
         }
 
         private void ConnectCallback(IAsyncResult _result)
@@ -188,7 +243,7 @@ public class Client : MonoBehaviour
 
         public UDP()
         {
-            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
+            endPoint = new IPEndPoint(IPAddress.Parse(instance.hostIp), instance.hostPort);
         }
 
         public void Connect(int _localPort)
@@ -273,6 +328,7 @@ public class Client : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
+            { (int)ServerPackets.pong, ClientHandle.Pong },
             { (int)ServerPackets.spawnPlayer, ClientHandle.SpawnPlayer },
             { (int)ServerPackets.playerPosition, ClientHandle.PlayerPosition },
             { (int)ServerPackets.playerRotation, ClientHandle.PlayerRotation },

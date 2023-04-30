@@ -9,6 +9,7 @@ public class NetworkManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public GameObject projectilePrefab;
+    public int port = 29950;
 
     private void Awake()
     {
@@ -22,12 +23,13 @@ public class NetworkManager : MonoBehaviour
             Destroy(this);
         }
     }
+
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.TICKS_PER_SEC;
 
-        Server.Start(50, 29950);
+        Server.Start(50, port);
     }
 
     private void OnApplicationQuit()

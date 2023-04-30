@@ -18,6 +18,13 @@ public class ServerHandle
         Server.clients[_fromClient].SendIntoGame(_username);
     }
 
+    public static void Ping(int _fromClient, Packet _packet)
+    {
+        //int _clientId = _packet.ReadInt();
+
+        Server.clients[_fromClient].SendPong();
+    }
+
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
         bool[] _inputs = new bool[_packet.ReadInt()];

@@ -17,6 +17,13 @@ public class ClientHandle : MonoBehaviour
         Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
     }
 
+    public static void Pong(Packet _packet)
+    {
+        //int _myId = _packet.ReadInt();
+
+        Client.instance.PongReceived(); // stop rtt timer and calculate rtt
+    }
+
     public static void SpawnPlayer(Packet _packet)
     {
         int _id = _packet.ReadInt();
