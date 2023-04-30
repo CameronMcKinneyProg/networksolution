@@ -11,9 +11,6 @@ public class UIManager : MonoBehaviour
     public GameObject startMenu;
     public TMP_InputField usernameField;
     public TMP_Text rttText;
-    public float rttUpdatePeriod = 1.0f;
-
-    private float nextRttUpdateTime = 0.0f;
 
     private void Awake()
     {
@@ -28,15 +25,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    if (Time.time > nextRttUpdateTime)
-    //    {
-    //        nextRttUpdateTime += rttUpdatePeriod;
-
-    //        rttText.text = $"{Client.PingAddress(hostIp, rttUpdatePeriod)} ms";
-    //    }
-    //}
+    public void UpdateRTTText(double _rtt)
+    {
+        _rtt *= 1000; // conversion from seconds to milliseconds
+        rttText.text = $"RTT: {_rtt}";
+    }
 
     public void ConnectToServer()
     {

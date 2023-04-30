@@ -21,7 +21,7 @@ public class ClientHandle : MonoBehaviour
     {
         //int _myId = _packet.ReadInt();
 
-        Client.instance.MeasureRoundTripTime(); // stop rtt timer and calculate rtt
+        Client.instance.PongReceived(); // stop rtt timer and calculate rtt
     }
 
     public static void SpawnPlayer(Packet _packet)

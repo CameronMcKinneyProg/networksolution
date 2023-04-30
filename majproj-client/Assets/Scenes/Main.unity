@@ -1777,6 +1777,8 @@ MonoBehaviour:
   hostIp: 127.0.0.1
   hostPort: 29950
   myId: 0
+  rttUpdatePeriod: 0.5
+  maxRttsToStore: 10
 --- !u!4 &954677731
 Transform:
   m_ObjectHideFlags: 0
@@ -2435,6 +2437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startMenu: {fileID: 1194536615}
   usernameField: {fileID: 1971028364}
+  rttText: {fileID: 552262797}
 --- !u!1 &1725539538
 GameObject:
   m_ObjectHideFlags: 0

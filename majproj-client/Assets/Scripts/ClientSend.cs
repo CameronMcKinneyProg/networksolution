@@ -33,7 +33,6 @@ public class ClientSend : MonoBehaviour
         using (Packet _packet = new Packet((int)ClientPackets.ping))
         {
             //_packet.Write(Client.instance.myId);
-            Client.instance.SetPingStartTime();
 
             SendUDPData(_packet);
         }

@@ -15,13 +15,16 @@ public class Client : MonoBehaviour
     public int myId = 0;
     public TCP tcp;
     public UDP udp;
+    public double rttUpdatePeriod = 1.0f;
     public int maxRttsToStore = 10;
 
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
-    private float pingStartTime = 0f;
-    private List<float> recentRtts;
+
+    private double nextRttUpdateTime = 0f;
+    private double pingStartTime = 0f;
+    private List<double> recentRtts;
 
     private void Awake()
     {
@@ -35,7 +38,20 @@ public class Client : MonoBehaviour
             Destroy(this);
         }
 
-        recentRtts = new List<float>();
+        recentRtts = new List<double>();
+    }
+
+    private void Update()
+    {
+        if (isConnected && Time.time > nextRttUpdateTime)
+        {
+            nextRttUpdateTime += rttUpdatePeriod;
+
+            UIManager.instance.UpdateRTTText(CalculateAverageRoundTripTime());
+
+            ClientSend.Ping();
+            SetPingStartTime();
+        }
     }
 
     private void OnApplicationQuit()
@@ -56,12 +72,12 @@ public class Client : MonoBehaviour
 
     public void SetPingStartTime()
     {
-        pingStartTime = Time.time;
+        pingStartTime = Time.realtimeSinceStartupAsDouble;
     }
 
-    public float MeasureRoundTripTime()
+    public double PongReceived()
     {
-        float _rtt = Time.time - pingStartTime;
+        double _rtt = Time.realtimeSinceStartupAsDouble - pingStartTime;
 
         if (recentRtts.Count < maxRttsToStore)
         {
@@ -76,15 +92,15 @@ public class Client : MonoBehaviour
         return _rtt;
     }
 
-    public float CalculateAverageRoundTripTime()
+    private double CalculateAverageRoundTripTime()
     {
-        float _accumulator = 0f;
-        foreach (float _rtt in recentRtts)
+        double _accumulator = 0f;
+        foreach (double _rtt in recentRtts)
         {
             _accumulator += _rtt;
         }
 
-        float _average = _accumulator / recentRtts.Count;
+        double _average = _accumulator / recentRtts.Count;
         return _average;
     }
 
@@ -312,6 +328,7 @@ public class Client : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
+            { (int)ServerPackets.pong, ClientHandle.Pong },
             { (int)ServerPackets.spawnPlayer, ClientHandle.SpawnPlayer },
             { (int)ServerPackets.playerPosition, ClientHandle.PlayerPosition },
             { (int)ServerPackets.playerRotation, ClientHandle.PlayerRotation },
