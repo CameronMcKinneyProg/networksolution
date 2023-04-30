@@ -28,6 +28,17 @@ public class ClientSend : MonoBehaviour
         }
     }
 
+    public static void Ping()
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.ping))
+        {
+            //_packet.Write(Client.instance.myId);
+            Client.instance.SetPingStartTime();
+
+            SendUDPData(_packet);
+        }
+    }
+
     public static void PlayerMovement(bool[] _inputs)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))

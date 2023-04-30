@@ -15,10 +15,13 @@ public class Client : MonoBehaviour
     public int myId = 0;
     public TCP tcp;
     public UDP udp;
+    public int maxRttsToStore = 10;
 
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
+    private float pingStartTime = 0f;
+    private List<float> recentRtts;
 
     private void Awake()
     {
@@ -31,6 +34,8 @@ public class Client : MonoBehaviour
             Debug.Log("Client instance already exists, destroying object!");
             Destroy(this);
         }
+
+        recentRtts = new List<float>();
     }
 
     private void OnApplicationQuit()
@@ -47,6 +52,40 @@ public class Client : MonoBehaviour
 
         isConnected = true;
         tcp.Connect();
+    }
+
+    public void SetPingStartTime()
+    {
+        pingStartTime = Time.time;
+    }
+
+    public float MeasureRoundTripTime()
+    {
+        float _rtt = Time.time - pingStartTime;
+
+        if (recentRtts.Count < maxRttsToStore)
+        {
+            recentRtts.Add(_rtt);
+        }
+        else
+        {
+            recentRtts.RemoveAt(0);
+            recentRtts.Add(_rtt);
+        }
+
+        return _rtt;
+    }
+
+    public float CalculateAverageRoundTripTime()
+    {
+        float _accumulator = 0f;
+        foreach (float _rtt in recentRtts)
+        {
+            _accumulator += _rtt;
+        }
+
+        float _average = _accumulator / recentRtts.Count;
+        return _average;
     }
 
     public class TCP

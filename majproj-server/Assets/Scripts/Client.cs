@@ -228,6 +228,11 @@ public class Client
         }
     }
 
+    public void SendPong()
+    {
+        ServerSend.Pong(id);
+    }
+
     public void Disconnect()
     {
         Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");

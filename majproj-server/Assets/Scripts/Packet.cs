@@ -8,6 +8,7 @@ using System.Text;
 public enum ServerPackets
 {
     welcome = 1,
+    pong,
     spawnPlayer,
     playerPosition,
     playerRotation,
@@ -29,6 +30,7 @@ public enum ServerPackets
 public enum ClientPackets
 {
     welcomeReceived = 1,
+    ping,
     playerMovement,
     playerShoot,
     playerThrowItem

@@ -73,6 +73,16 @@ public class ServerSend
         }
     }
 
+    public static void Pong(int _toClient)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.pong))
+        {
+            //_packet.Write(_toClient);
+
+            SendUDPData(_toClient, _packet);
+        }
+    }
+
     /// <summary>Tells a client to spawn a player.</summary>
     /// <param name="_toClient">The client that should spawn the player.</param>
     /// <param name="_player">The player to spawn.</param>
