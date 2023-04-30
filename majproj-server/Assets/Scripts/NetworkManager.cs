@@ -23,6 +23,7 @@ public class NetworkManager : MonoBehaviour
             Destroy(this);
         }
     }
+
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
