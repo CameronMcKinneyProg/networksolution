@@ -168,7 +168,7 @@ MonoBehaviour:
   gravity: -19.62
   moveSpeed: 5
   jumpSpeed: 9
-  throwForce: 600
+  throwForce: 700
   shootDamage: 50
   shootRange: 25
   health: 0

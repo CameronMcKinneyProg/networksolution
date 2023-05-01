@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
-    public float throwForce = 600f;
+    public float throwForce = 700f;
     public float shootDamage = 50f;
     public float shootRange = 25f;
     public float health;
@@ -48,19 +48,19 @@ public class Player : MonoBehaviour
         Vector2 _inputDirection = Vector2.zero;
         if (inputs[0])
         {
-            _inputDirection.y += 1;
+            _inputDirection.y += 1; // W
         }
         if (inputs[1])
         {
-            _inputDirection.y -= 1;
+            _inputDirection.y -= 1; // S
         }
         if (inputs[2])
         {
-            _inputDirection.x -= 1;
+            _inputDirection.x -= 1; // A
         }
         if (inputs[3])
         {
-            _inputDirection.x += 1;
+            _inputDirection.x += 1; // D
         }
 
         Move(_inputDirection);
