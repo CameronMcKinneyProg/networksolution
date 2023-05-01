@@ -8,7 +8,7 @@ using System.Net.Sockets;
 public class Client : MonoBehaviour
 {
     public static Client instance; // singleton
-    public static int dataBufferSize = 4096;
+    public static int tcpDataBufferSize = 4096;
 
     public string hostIp = "127.0.0.1";
     public int hostPort = 29950;
@@ -17,10 +17,10 @@ public class Client : MonoBehaviour
     public UDP udp;
     public double rttUpdatePeriod = 1.0f;
     public int maxRttsToStore = 10;
+    public delegate void PacketHandler(Packet _packet);
+    public static Dictionary<int, PacketHandler> packetHandlers;
 
     private bool isConnected = false;
-    private delegate void PacketHandler(Packet _packet);
-    private static Dictionary<int, PacketHandler> packetHandlers;
 
     private double nextRttUpdateTime = 0f;
     private double pingStartTime = 0f;
@@ -61,7 +61,7 @@ public class Client : MonoBehaviour
 
     public void ConnectToServer()
     {
-        tcp = new TCP();
+        tcp = new TCP(tcpDataBufferSize);
         udp = new UDP();
 
         InitializeClientData();
@@ -104,7 +104,7 @@ public class Client : MonoBehaviour
         return _average;
     }
 
-    public class TCP
+    /*public class TCP
     {
         public TcpClient socket;
 
@@ -234,7 +234,7 @@ public class Client : MonoBehaviour
             receiveBuffer = null;
             socket = null;
         }
-    }
+    }*/
 
     public class UDP
     {
@@ -348,7 +348,7 @@ public class Client : MonoBehaviour
         Debug.Log("Initialised packets.");
     }
 
-    private void Disconnect()
+    public void Disconnect()
     {
         if (isConnected)
         {
