@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
         id = _id;
         username = _username;
         health = maxHealth;
+        model.enabled = true;
     }
 
     public void SetHealth(float _health)
