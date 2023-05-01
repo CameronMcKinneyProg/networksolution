@@ -21,8 +21,7 @@ public class Client
         udp = new UDP(id);
     }
 
-    /*
-    public class TCP
+    /*public class TCP
     {
         public TcpClient socket;
 
@@ -148,8 +147,7 @@ public class Client
         }
     }*/
 
-    /*
-    public class UDP
+    /*public class UDP
     {
         public IPEndPoint endPoint;
 
