@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public class ClientHandle : MonoBehaviour
+public class ClientHandle
 {
     public static void Welcome(Packet _packet)
     {
@@ -62,7 +62,7 @@ public class ClientHandle : MonoBehaviour
     {
         int _id = _packet.ReadInt();
 
-        Destroy(GameManager.players[_id].gameObject);
+        MonoBehaviour.Destroy(GameManager.players[_id].gameObject);
         GameManager.players.Remove(_id);
     }
 

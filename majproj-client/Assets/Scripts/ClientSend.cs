@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClientSend : MonoBehaviour
+public class ClientSend
 {
+    // TODO Create circular buffer of movement input snapshots
+
     private static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength();
