@@ -34,21 +34,27 @@ public class ClientSend
     {
         using (Packet _packet = new Packet((int)ClientPackets.ping))
         {
-            //_packet.Write(Client.instance.myId);
+            _packet.Write(Time.realtimeSinceStartup);
 
             SendUDPData(_packet);
         }
     }
 
-    public static void PlayerMovement(bool[] _inputs)
+    public static void PlayerMovement(InputSnapshotMove _snapshot)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
         {
-            _packet.Write(_inputs.Length);
-            foreach (bool _input in _inputs)
+            // snapshot sequence number
+            _packet.Write(_snapshot.sequenceNum);
+
+            // position
+            _packet.Write(_snapshot.inputs.Length);
+            foreach (bool _input in _snapshot.inputs)
             {
                 _packet.Write(_input);
             }
+
+            // rotation
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
 
             SendUDPData(_packet);

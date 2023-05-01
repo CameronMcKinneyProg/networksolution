@@ -10,21 +10,24 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            ClientSend.PlayerShoot(camTransform.forward);
+            ClientSend.PlayerShoot(camTransform.forward); // RPC
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            ClientSend.PlayerThrowItem(camTransform.forward);
+            ClientSend.PlayerThrowItem(camTransform.forward); // RPC
         }
     }
 
     private void FixedUpdate()
     {
-        SendInputToServer();
+        InputSnapshotMove _snapshot = SnapshotManager.instance.NewInputSnapshotMove(GetInput());
+
+        SendInputSnapshotToServer(_snapshot);
+
     }
 
-    private void SendInputToServer()
+    private bool[] GetInput()
     {
         bool[] _inputs = new bool[]
         {
@@ -35,6 +38,16 @@ public class PlayerController : MonoBehaviour
             Input.GetKey(KeyCode.Space)
         };
 
-        ClientSend.PlayerMovement(_inputs);
+        return _inputs;
+    }
+
+    private void SendInputSnapshotToServer(InputSnapshotMove _snapshot)
+    {
+        ClientSend.PlayerMovement(_snapshot);
+    }
+
+    private void PredictMovement()
+    {
+
     }
 }

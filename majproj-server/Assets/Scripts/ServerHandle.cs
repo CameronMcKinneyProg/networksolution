@@ -20,18 +20,25 @@ public class ServerHandle
 
     public static void Ping(int _fromClient, Packet _packet)
     {
-        //int _clientId = _packet.ReadInt();
+        float _clientTime = _packet.ReadFloat();
+        Server.clients[_fromClient].remoteTime = _clientTime;
 
         Server.clients[_fromClient].SendPong();
     }
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
+        // snapshot sequence number
+        long _sequenceNum = _packet.ReadLong();
+
+        // position
         bool[] _inputs = new bool[_packet.ReadInt()];
         for (int i = 0; i < _inputs.Length; i++)
         {
             _inputs[i] = _packet.ReadBool();
         }
+
+        // rotation
         Quaternion _rotation = _packet.ReadQuaternion();
 
         Server.clients[_fromClient].player.SetInput(_inputs, _rotation);

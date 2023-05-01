@@ -2,6 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct PlayerInput
+{
+    bool forward;
+    bool back;
+    bool left;
+    bool right;
+    bool jump;
+};
+
+public struct PlayerState
+{
+    Vector3 position;
+    Vector3 yVelocity;
+};
+
 public class Player : MonoBehaviour
 {
     public int id;

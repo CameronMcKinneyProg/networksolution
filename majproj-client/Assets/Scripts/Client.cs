@@ -38,9 +38,9 @@ public class Client : MonoBehaviour
         recentRtts = new List<double>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (isConnected && Time.time > nextRttUpdateTime)
+        if (isConnected && Time.realtimeSinceStartupAsDouble > nextRttUpdateTime)
         {
             nextRttUpdateTime += rttUpdatePeriod;
 
@@ -76,15 +76,11 @@ public class Client : MonoBehaviour
     {
         double _rtt = Time.realtimeSinceStartupAsDouble - pingStartTime;
 
-        if (recentRtts.Count < maxRttsToStore)
-        {
-            recentRtts.Add(_rtt);
-        }
-        else
+        if (recentRtts.Count >= maxRttsToStore)
         {
             recentRtts.RemoveAt(0);
-            recentRtts.Add(_rtt);
         }
+        recentRtts.Add(_rtt);
 
         return _rtt;
     }

@@ -13,7 +13,8 @@ public class Client
     public Player player;
     public TCP tcp;
     public UDP udp;
-
+    public double remoteTime;
+    
     public Client(int _clientId)
     {
         id = _clientId;
