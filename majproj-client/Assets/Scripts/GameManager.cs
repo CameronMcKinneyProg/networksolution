@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = targetFrameRate;
-        Time.fixedDeltaTime = 1 / Constants.TICKS_PER_SEC;
+        Time.fixedDeltaTime = 1.0f / Constants.TICKS_PER_SEC;
     }
 
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
