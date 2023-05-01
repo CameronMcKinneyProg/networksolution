@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = Constants.TICKS_PER_SEC;
+        Time.fixedDeltaTime = 1 / Constants.TICKS_PER_SEC;
 
         Server.Start(50, port);
     }
