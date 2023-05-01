@@ -1534,6 +1534,7 @@ MonoBehaviour:
   itemSpawnerPrefab: {fileID: 6856784346764793609, guid: bfb7eb3d5f49e3f40b5f00d6619eb253, type: 3}
   projectilePrefab: {fileID: 5459991677927829447, guid: 2910bf26783833d4cb7c7bdd808eeac5, type: 3}
   enemyPrefab: {fileID: 2339870717480938743, guid: bf384a1a25cd4624fa1f7c73b0ea8469, type: 3}
+  targetFrameRate: 120
 --- !u!4 &756797134
 Transform:
   m_ObjectHideFlags: 0

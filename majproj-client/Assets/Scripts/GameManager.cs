@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GameObject projectilePrefab;
     public GameObject enemyPrefab;
 
+    public int targetFrameRate = 128;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = targetFrameRate;
     }
 
     public void SpawnPlayer(int _id, string _username, Vector3 _position, Quaternion _rotation)
