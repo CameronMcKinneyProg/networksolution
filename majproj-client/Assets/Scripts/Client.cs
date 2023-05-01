@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.Net;
-using System.Net.Sockets;
 
 public class Client : MonoBehaviour
 {
@@ -236,7 +233,7 @@ public class Client : MonoBehaviour
         }
     }*/
 
-    public class UDP
+    /*public class UDP
     {
         public UdpClient socket;
         public IPEndPoint endPoint;
@@ -321,7 +318,7 @@ public class Client : MonoBehaviour
             endPoint = null;
             socket = null;
         }
-    }
+    }*/
 
     private void InitializeClientData()
     {
