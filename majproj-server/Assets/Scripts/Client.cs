@@ -13,7 +13,7 @@ public class Client
     public Player player;
     public TCP tcp;
     public UDP udp;
-    public double remoteTime;
+    public float mostRecentRemoteTime;
     
     public Client(int _clientId)
     {
