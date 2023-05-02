@@ -20,16 +20,25 @@ public class ServerHandle
 
     public static void Ping(int _fromClient, Packet _packet)
     {
-        float _clientTime = _packet.ReadFloat();
-        Server.clients[_fromClient].remoteTime = _clientTime;
+        //float _newClientTime = _packet.ReadFloat();
+        //Server.clients[_fromClient].remoteTime = _newClientTime;
 
         Server.clients[_fromClient].SendPong();
     }
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
-        // snapshot sequence number
-        long _sequenceNum = _packet.ReadLong();
+        // snapshot time
+        float _thisMoveTime = _packet.ReadFloat();
+        
+        if (_thisMoveTime < Server.clients[_fromClient].mostRecentRemoteTime)
+        {
+            return; // old packet; discard
+        }
+
+        float _deltaTime = _thisMoveTime - Server.clients[_fromClient].mostRecentRemoteTime;
+
+        Server.clients[_fromClient].mostRecentRemoteTime = _thisMoveTime;
 
         // position
         bool[] _inputs = new bool[_packet.ReadInt()];
@@ -41,7 +50,8 @@ public class ServerHandle
         // rotation
         Quaternion _rotation = _packet.ReadQuaternion();
 
-        Server.clients[_fromClient].player.SetInput(_inputs, _rotation);
+        Server.clients[_fromClient].player.ProcessInput(_deltaTime, _inputs);
+        Server.clients[_fromClient].player.SetInput(_inputs, _rotation); // legacy
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)
