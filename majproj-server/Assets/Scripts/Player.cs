@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (health <= 0f)
+        /*if (health <= 0f)
         {
             return;
         }
@@ -78,13 +78,43 @@ public class Player : MonoBehaviour
             _inputDirection.x += 1;
         }
 
-        Move(_inputDirection);
+        Move(_inputDirection);*/
     }
 
-    private void Move(Vector2 _inputDirection)
+    public void ProcessInput(float _clientDeltaTime, bool[] _inputs)
     {
+        if (health <= 0f)
+        {
+            return;
+        }
+
+        Vector2 _inputDirection = Vector2.zero;
+        if (_inputs[0])
+        {
+            _inputDirection.y += 1;
+        }
+        if (_inputs[1])
+        {
+            _inputDirection.y -= 1;
+        }
+        if (_inputs[2])
+        {
+            _inputDirection.x -= 1;
+        }
+        if (_inputs[3])
+        {
+            _inputDirection.x += 1;
+        }
+
+        Move(_clientDeltaTime, _inputDirection);
+    }
+
+    private void Move(float _deltaTime, Vector2 _inputDirection)
+    {
+        float deltaOffset = _deltaTime / Time.fixedDeltaTime;
+
         Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
-        _moveDirection *= moveSpeed;
+        _moveDirection *= moveSpeed * deltaOffset;
 
         if (controller.isGrounded)
         {
