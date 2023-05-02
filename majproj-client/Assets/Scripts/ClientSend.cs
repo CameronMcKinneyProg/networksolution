@@ -34,7 +34,7 @@ public class ClientSend
     {
         using (Packet _packet = new Packet((int)ClientPackets.ping))
         {
-            _packet.Write(Time.realtimeSinceStartup);
+            //_packet.Write(Time.realtimeSinceStartup);
 
             SendUDPData(_packet);
         }
@@ -44,8 +44,8 @@ public class ClientSend
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
         {
-            // snapshot sequence number
-            _packet.Write(_snapshot.sequenceNum);
+            // snapshot time
+            _packet.Write(Time.realtimeSinceStartup);
 
             // position
             _packet.Write(_snapshot.inputs.Length);
