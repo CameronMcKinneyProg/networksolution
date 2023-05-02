@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public static int maxEnemies = 10;
+    public static int maxEnemies = 4;
     public static Dictionary<int, Enemy> enemies = new Dictionary<int, Enemy>();
     private static int nextEnemyId = 1;
 
