@@ -42,7 +42,18 @@ public class ClientHandle
         //GameManager.players[_id].transform.position = _position;
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            _player.transform.position = _position;
+            Vector3 _difference = _position - _player.transform.position;
+
+            float _distance = _difference.magnitude;
+
+            if (_distance > 2.0f)
+            {
+                _player.transform.position = _position;
+            }
+            else if (_distance > 0.1f)
+            {
+                _player.transform.position += _difference * 0.2f;
+            }
         }
     }
 
