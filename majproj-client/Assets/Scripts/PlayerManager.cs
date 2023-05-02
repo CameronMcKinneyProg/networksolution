@@ -44,6 +44,22 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void Move(Vector3 _newPosition)
+    {
+        Vector3 _difference = _newPosition - transform.position;
+
+        float _distance = _difference.magnitude;
+
+        if (_distance > 2.0f)
+        {
+            transform.position = _newPosition; // snap correction
+        }
+        else if (_distance > 0.1f)
+        {
+            transform.position += _difference * 0.2f; // exponentially smoothed moving average correction
+        }
+    }
+
     public void Die()
     {
         model.enabled = false;
