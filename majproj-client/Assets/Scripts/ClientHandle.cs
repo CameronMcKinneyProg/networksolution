@@ -38,12 +38,14 @@ public class ClientHandle
     {
         int _id = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
-        float _serverStoredTime = _packet.ReadFloat();
+        float _yVelocity = _packet.ReadFloat();
+        long _moveId = _packet.ReadLong();
+        //float _serverStoredTime = _packet.ReadFloat();
 
         if (_id == Client.instance.myId)
         {
             // server reconciliation
-            PlayerController.instance.ComparePositionWithBufferedMove(_position, _serverStoredTime);
+            PlayerController.instance.CompareStateWithBufferedMove(_position, _yVelocity, _moveId);//, _serverStoredTime
         }
         else if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {

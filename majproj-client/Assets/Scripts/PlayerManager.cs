@@ -20,6 +20,7 @@ public struct PlayerState
 
 public struct PlayerMove
 {
+    public long id;
     public float time;
     public PlayerState state;
     public PlayerInput input;
@@ -71,11 +72,13 @@ public class PlayerManager : MonoBehaviour
     public void Die()
     {
         model.enabled = false;
+        transform.position = new Vector3(0f, 30f, 0f);
     }
 
     public void Respawn()
     {
         model.enabled = true;
+        transform.position = new Vector3(0f, 5f, 0f);
         SetHealth(maxHealth);
     }
 }
