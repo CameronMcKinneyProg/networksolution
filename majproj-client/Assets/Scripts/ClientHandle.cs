@@ -116,7 +116,11 @@ public class ClientHandle
         int _thrownByPlayer = _packet.ReadInt();
 
         GameManager.instance.SpawnProjectile(_projectileId, _position);
-        GameManager.players[_thrownByPlayer].itemCount--;
+
+        if (GameManager.players.TryGetValue(_thrownByPlayer, out PlayerManager _player))
+        {
+            _player.itemCount--;
+        }
         // TODO: this goes against the idea of separately networked states and events
     }
 
@@ -138,7 +142,10 @@ public class ClientHandle
         int _projectileId = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
 
-        GameManager.projectiles[_projectileId].Explode(_position);
+        if (GameManager.projectiles.TryGetValue(_projectileId, out ProjectileManager _projectile))
+        {
+            _projectile.Explode(_position);
+        }
         //Debug.Log($"#{_projectileId}: ProjectileExploded packet received through TCP.");
     }
 
@@ -166,6 +173,9 @@ public class ClientHandle
         int _enemyId = _packet.ReadInt();
         float _health = _packet.ReadFloat();
 
-        GameManager.enemies[_enemyId].SetHealth(_health);
+        if (GameManager.enemies.TryGetValue(_enemyId, out EnemyManager _enemy))
+        {
+            _enemy.SetHealth(_health);
+        }
     }
 }
