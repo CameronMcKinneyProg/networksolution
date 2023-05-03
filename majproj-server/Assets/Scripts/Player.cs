@@ -53,9 +53,9 @@ public class Player : MonoBehaviour
         inputs = new bool[5];
     }
 
-    public void FixedUpdate()
+    /*public void FixedUpdate()
     {
-        /*if (health <= 0f)
+        if (health <= 0f)
         {
             return;
         }
@@ -78,8 +78,8 @@ public class Player : MonoBehaviour
             _inputDirection.x += 1;
         }
 
-        Move(_inputDirection);*/
-    }
+        Move(_inputDirection);
+    }*/
 
     public void ProcessInput(float _clientDeltaTime, bool[] _inputs)
     {

@@ -4,31 +4,51 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+
     public Transform camTransform;
+    public PlayerManager playerManager;
+    public CharacterController charController;
+    public float gravity = -9.81f;
+    public float moveSpeed = 5f;
+    public float jumpSpeed = 5f;
 
-    private void Update()
+    private float yVelocity = 0f;
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (instance == null)
         {
-            ClientSend.PlayerShoot(camTransform.forward); // RPC
+            instance = this;
         }
+        else if (instance != this)
+        {
+            Debug.Log("PlayerController instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            ClientSend.PlayerThrowItem(camTransform.forward); // RPC
-        }
+    private void Start()
+    {
+        gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
+        moveSpeed *= Time.fixedDeltaTime;
+        jumpSpeed *= Time.fixedDeltaTime;
     }
 
     private void FixedUpdate()
     {
-        InputSnapshotMove _snapshot = SnapshotManager.instance.NewInputSnapshotMove(GetInput());
+        if (playerManager.health <= 0f) // only server can cause this
+        {
+            charController.enabled = false;
+            transform.position = new Vector3(0f, 25f, 0f);
+            return;
+        }
+        else
+        {
+            charController.enabled = true;
+        }
 
-        SendInputSnapshotToServer(_snapshot);
-
-    }
-
-    private bool[] GetInput()
-    {
+        // get input for this physics update
         bool[] _inputs = new bool[]
         {
             Input.GetKey(KeyCode.W),
@@ -38,16 +58,63 @@ public class PlayerController : MonoBehaviour
             Input.GetKey(KeyCode.Space)
         };
 
-        return _inputs;
-    }
+        // send RPCs to server
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            ClientSend.PlayerShoot(camTransform.forward); // RPC
+        }
 
-    private void SendInputSnapshotToServer(InputSnapshotMove _snapshot)
-    {
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            ClientSend.PlayerThrowItem(camTransform.forward); // RPC
+        }
+
+        InputSnapshotMove _snapshot = SnapshotManager.instance.NewInputSnapshotMove(_inputs);
         ClientSend.PlayerMovement(_snapshot);
+
+        // client prediction
+        PredictMovement(ProcessInput(_inputs), _inputs[4]);
     }
 
-    private void PredictMovement()
+    private Vector2 ProcessInput(bool[] _inputs)
     {
+        Vector2 _inputDirection = Vector2.zero;
+        if (_inputs[0])
+        {
+            _inputDirection.y += 1;
+        }
+        if (_inputs[1])
+        {
+            _inputDirection.y -= 1;
+        }
+        if (_inputs[2])
+        {
+            _inputDirection.x -= 1;
+        }
+        if (_inputs[3])
+        {
+            _inputDirection.x += 1;
+        }
 
+        return _inputDirection;
+    }
+
+    private void PredictMovement(Vector2 _inputDirection, bool jump)
+    {
+        Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
+        _moveDirection *= moveSpeed;
+
+        if (charController.isGrounded)
+        {
+            yVelocity = 0f;
+            if (jump)
+            {
+                yVelocity = jumpSpeed;
+            }
+        }
+        yVelocity += gravity;
+
+        _moveDirection.y = yVelocity;
+        charController.Move(_moveDirection);
     }
 }
