@@ -40,19 +40,24 @@ public class ClientSend
         }
     }
 
-    public static void PlayerMovement(InputSnapshotMove _snapshot)
+    public static void PlayerMovement(PlayerMove _move)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
         {
-            // snapshot time
-            _packet.Write(Time.realtimeSinceStartup);
+            // move time
+            _packet.Write(_move.time);
 
-            // position
-            _packet.Write(_snapshot.inputs.Length);
-            foreach (bool _input in _snapshot.inputs)
-            {
-                _packet.Write(_input);
-            }
+            // move inputs
+            _packet.Write(_move.input.forward);
+            _packet.Write(_move.input.back);
+            _packet.Write(_move.input.left);
+            _packet.Write(_move.input.right);
+            _packet.Write(_move.input.jump);
+
+            // move state
+            //_packet.Write(_move.state.position);
+            //_packet.Write(_move.state.yVelocity);
+            //_packet.Write(_move.state.isGrounded);
 
             // rotation
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);

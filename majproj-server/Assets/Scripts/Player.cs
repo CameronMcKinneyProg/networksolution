@@ -4,18 +4,26 @@ using UnityEngine;
 
 public struct PlayerInput
 {
-    bool forward;
-    bool back;
-    bool left;
-    bool right;
-    bool jump;
+    public bool forward;
+    public bool back;
+    public bool left;
+    public bool right;
+    public bool jump;
 };
 
 public struct PlayerState
 {
-    Vector3 position;
-    Vector3 yVelocity;
+    public Vector3 position;
+    public float yVelocity;
+    public bool isGrounded;
 };
+
+public struct PlayerMove
+{
+    public float time;
+    public PlayerState state;
+    public PlayerInput input;
+}
 
 public class Player : MonoBehaviour
 {
@@ -81,35 +89,39 @@ public class Player : MonoBehaviour
         Move(_inputDirection);
     }*/
 
-    public void ProcessInput(float _clientDeltaTime, bool[] _inputs)
+    public void ProcessInput(PlayerMove _move)
     {
         if (health <= 0f)
         {
             return;
         }
 
+        float _deltaTime = _move.time - Server.clients[id].mostRecentRemoteTime; // calculate time passed since stored remote time
+
+        Server.clients[id].mostRecentRemoteTime = _move.time; // update stored remote time
+
         Vector2 _inputDirection = Vector2.zero;
-        if (_inputs[0])
+        if (_move.input.forward)
         {
             _inputDirection.y += 1;
         }
-        if (_inputs[1])
+        if (_move.input.back)
         {
             _inputDirection.y -= 1;
         }
-        if (_inputs[2])
+        if (_move.input.left)
         {
             _inputDirection.x -= 1;
         }
-        if (_inputs[3])
+        if (_move.input.right)
         {
             _inputDirection.x += 1;
         }
 
-        Move(_clientDeltaTime, _inputDirection);
+        Move(_deltaTime, _inputDirection, _move.input.jump);
     }
 
-    private void Move(float _deltaTime, Vector2 _inputDirection)
+    private void Move(float _deltaTime, Vector2 _inputDirection, bool _jump)
     {
         float deltaOffset = _deltaTime / Time.fixedDeltaTime;
 
@@ -119,7 +131,7 @@ public class Player : MonoBehaviour
         if (controller.isGrounded)
         {
             yVelocity = 0f;
-            if (inputs[4])
+            if (_jump)
             {
                 yVelocity = jumpSpeed;
             }
@@ -133,9 +145,8 @@ public class Player : MonoBehaviour
         ServerSend.PlayerRotation(this);
     }
 
-    public void SetInput(bool[] _inputs, Quaternion _rotation)
+    public void SetInput(Quaternion _rotation)
     {
-        inputs = _inputs;
         transform.rotation = _rotation;
     }
 

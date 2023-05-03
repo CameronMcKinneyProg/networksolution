@@ -28,30 +28,35 @@ public class ServerHandle
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
-        // snapshot time
-        float _thisMoveTime = _packet.ReadFloat();
-        
-        if (_thisMoveTime < Server.clients[_fromClient].mostRecentRemoteTime)
+        // create new move
+        PlayerMove _move = new PlayerMove();
+
+        // move time
+        _move.time = _packet.ReadFloat();
+
+        // check if this move should be processed
+        if (_move.time < Server.clients[_fromClient].mostRecentRemoteTime)
         {
             return; // old packet; discard
         }
 
-        float _deltaTime = _thisMoveTime - Server.clients[_fromClient].mostRecentRemoteTime;
+        // move inputs
+        _move.input.forward = _packet.ReadBool();
+        _move.input.back = _packet.ReadBool();
+        _move.input.left = _packet.ReadBool();
+        _move.input.right = _packet.ReadBool();
+        _move.input.jump = _packet.ReadBool();
 
-        Server.clients[_fromClient].mostRecentRemoteTime = _thisMoveTime;
-
-        // position
-        bool[] _inputs = new bool[_packet.ReadInt()];
-        for (int i = 0; i < _inputs.Length; i++)
-        {
-            _inputs[i] = _packet.ReadBool();
-        }
+        // move state
+        //_move.state.position = _packet.ReadVector3();
+        //_move.state.yVelocity = _packet.ReadFloat();
+        //_move.state.isGrounded = _packet.ReadBool();
 
         // rotation
         Quaternion _rotation = _packet.ReadQuaternion();
 
-        Server.clients[_fromClient].player.ProcessInput(_deltaTime, _inputs);
-        Server.clients[_fromClient].player.SetInput(_inputs, _rotation); // legacy
+        Server.clients[_fromClient].player.ProcessInput(_move);
+        Server.clients[_fromClient].player.SetInput(_rotation); // legacy
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)

@@ -20,6 +20,7 @@ public class Client
         id = _clientId;
         tcp = new TCP(id, tcpDataBufferSize);
         udp = new UDP(id);
+        mostRecentRemoteTime = 0f;
     }
 
     /*public class TCP

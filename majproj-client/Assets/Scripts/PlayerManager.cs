@@ -4,18 +4,26 @@ using UnityEngine;
 
 public struct PlayerInput
 {
-    bool forward;
-    bool back;
-    bool left;
-    bool right;
-    bool jump;
+    public bool forward;
+    public bool back;
+    public bool left;
+    public bool right;
+    public bool jump;
 };
 
 public struct PlayerState
 {
-    Vector3 position;
-    Vector3 yVelocity;
+    public Vector3 position;
+    public float yVelocity;
+    public bool isGrounded;
 };
+
+public struct PlayerMove
+{
+    public float time;
+    public PlayerState state;
+    public PlayerInput input;
+}
 
 public class PlayerManager : MonoBehaviour
 {
