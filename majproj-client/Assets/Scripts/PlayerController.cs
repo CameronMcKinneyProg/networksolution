@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 5f;
 
     private List<PlayerMove> playerMoves;
+    private long nextMoveId = 1L;
     private float yVelocity;
 
     private void Awake()
@@ -41,19 +42,17 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerManager.health <= 0f) // only server can cause this
+        if (playerManager.health <= 0)
         {
-            charController.enabled = false;
-            transform.position = new Vector3(0f, 25f, 0f);
             return;
-        }
-        else
-        {
-            charController.enabled = true;
         }
 
         // create new Move
         PlayerMove _move = new PlayerMove();
+
+        // set move id
+        _move.id = nextMoveId;
+        nextMoveId++;
 
         // set move time
         _move.time = Time.realtimeSinceStartup;
@@ -131,31 +130,35 @@ public class PlayerController : MonoBehaviour
         charController.Move(_moveDirection);
     }
 
-    public void ComparePositionWithBufferedMove(Vector3 _correctPosition, float _timeOfMove)
+    public void CompareStateWithBufferedMove(Vector3 _correctPosition, float _correctYVelocity, long _moveId)//, float _timeOfMove
     {
         for (int i = 0; i < playerMoves.Count; i++)
         {
-            if (_timeOfMove == playerMoves[i].time)
+            if (_moveId == playerMoves[i].id)
             {
                 PlayerMove _bufferedMove = playerMoves[i]; // capture compared move to check position
 
                 playerMoves.RemoveRange(0, i + 1); // remove this and all older moves from buffer
+                Debug.Log($"playerMoves.Count: {playerMoves.Count}");
 
                 // compare positions
-                Vector3 _difference = _correctPosition - _bufferedMove.state.position;
+                transform.position = _correctPosition; // snap correction
+                yVelocity = _correctYVelocity;
+                ResimulateUnprocessedInputs();
+                //Vector3 _difference = _correctPosition - _bufferedMove.state.position;
 
-                float _distance = _difference.magnitude;
+                //float _distance = _difference.magnitude;
 
-                if (_distance > 1.0f)
-                {
-                    Debug.Log($"Snap Correction, moves since last move processed by server: {i}, buffer moves to resimulate: {playerMoves.Count}");
-                    transform.position = _correctPosition; // snap correction
-                    ResimulateUnprocessedInputs();
-                }
-                else if (_distance > 0.1f)
-                {
-                    // exponentially smoothed moving average correction
-                }
+                //if (_distance > 1.0f)
+                //{
+                //    //Debug.Log($"Snap Correction, last move processed by server: {_moveId}, buffer moves discarded: {i+1}, buffer moves to resimulate: {playerMoves.Count}");
+                //    transform.position = _correctPosition; // snap correction
+                //    ResimulateUnprocessedInputs();
+                //}
+                //else if (_distance > 0.1f)
+                //{
+                //    // exponentially smoothed moving average correction
+                //}
 
                 break;
             }
@@ -164,9 +167,10 @@ public class PlayerController : MonoBehaviour
 
     private void ResimulateUnprocessedInputs()
     {
-        for (int i = 0; i < playerMoves.Count; i++)
+        for (int j = 0; j < playerMoves.Count; j++)
         {
-            PredictMovement(ProcessInput(playerMoves[i]), playerMoves[i].state.isGrounded, playerMoves[i].input.jump);
+            Debug.Log(j);
+            PredictMovement(ProcessInput(playerMoves[j]), charController.isGrounded, playerMoves[j].input.jump);
         }
     }
 }

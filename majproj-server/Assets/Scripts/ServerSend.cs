@@ -107,7 +107,9 @@ public class ServerSend
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.position);
-            _packet.Write(Server.clients[_player.id].mostRecentRemoteTime);
+            _packet.Write(_player.yVelocity);
+            _packet.Write(_player.mostRecentMoveId);
+            //_packet.Write(Server.clients[_player.id].mostRecentRemoteTime);
 
             SendUDPDataToAll(_packet);
         }

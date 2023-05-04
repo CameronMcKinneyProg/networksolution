@@ -31,11 +31,18 @@ public class ServerHandle
         // create new move
         PlayerMove _move = new PlayerMove();
 
+        // move id
+        _move.id = _packet.ReadLong();
+
         // move time
         _move.time = _packet.ReadFloat();
 
         // check if this move should be processed
-        if (_move.time < Server.clients[_fromClient].mostRecentRemoteTime)
+        //if (_move.time < Server.clients[_fromClient].mostRecentRemoteTime)
+        //{
+        //    return; // old packet; discard
+        //}
+        if (_move.id < Server.clients[_fromClient].player.mostRecentMoveId)
         {
             return; // old packet; discard
         }

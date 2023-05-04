@@ -20,6 +20,7 @@ public struct PlayerState
 
 public struct PlayerMove
 {
+    public long id;
     public float time;
     public PlayerState state;
     public PlayerInput input;
@@ -41,9 +42,10 @@ public class Player : MonoBehaviour
     public float maxHealth = 100f;
     public int itemAmount = 0;
     public int maxItemAmount = 3;
+    public long mostRecentMoveId = 0L;
+    public float yVelocity = 0f;
 
     private bool[] inputs;
-    private float yVelocity = 0f;
 
     private void Start()
     {
@@ -96,8 +98,9 @@ public class Player : MonoBehaviour
             return;
         }
 
-        float _deltaTime = _move.time - Server.clients[id].mostRecentRemoteTime; // calculate time passed since stored remote time
+        mostRecentMoveId = _move.id; // update stored remote move id
 
+        //float _deltaTime = _move.time - Server.clients[id].mostRecentRemoteTime; // calculate time passed since stored remote time
         Server.clients[id].mostRecentRemoteTime = _move.time; // update stored remote time
 
         Vector2 _inputDirection = Vector2.zero;
@@ -118,15 +121,15 @@ public class Player : MonoBehaviour
             _inputDirection.x += 1;
         }
 
-        Move(_deltaTime, _inputDirection, _move.input.jump);
+        Move(_inputDirection, _move.input.jump);
     }
 
-    private void Move(float _deltaTime, Vector2 _inputDirection, bool _jump)
+    private void Move(Vector2 _inputDirection, bool _jump)
     {
-        float deltaOffset = _deltaTime / Time.fixedDeltaTime;
+        //float deltaOffset = _deltaTime / Time.fixedDeltaTime;
 
         Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
-        _moveDirection *= moveSpeed * deltaOffset;
+        _moveDirection *= moveSpeed;
 
         if (controller.isGrounded)
         {
@@ -194,14 +197,18 @@ public class Player : MonoBehaviour
         health -= _damage;
         if (health <= 0f)
         {
-            health = 0f;
-            controller.enabled = false;
-            transform.position = new Vector3(0f, 25f, 0f);
-            ServerSend.PlayerPosition(this);
-            StartCoroutine(Respawn());
+            Die();
         }
 
         ServerSend.PlayerHealth(this);
+    }
+
+    private void Die()
+    {
+        health = 0f;
+        controller.enabled = false;
+        transform.position = new Vector3(0f, 30f, 0f);
+        StartCoroutine(Respawn());
     }
 
     private IEnumerator Respawn()
@@ -210,6 +217,7 @@ public class Player : MonoBehaviour
 
         health = maxHealth;
         controller.enabled = true;
+        transform.position = new Vector3(0f, 5f, 0f);
         ServerSend.PlayerRespawned(this);
     }
 

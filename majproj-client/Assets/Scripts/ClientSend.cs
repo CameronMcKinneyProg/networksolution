@@ -44,6 +44,9 @@ public class ClientSend
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
         {
+            // move id
+            _packet.Write(_move.id);
+
             // move time
             _packet.Write(_move.time);
 
