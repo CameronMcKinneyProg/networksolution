@@ -139,38 +139,39 @@ public class PlayerController : MonoBehaviour
                 PlayerMove _bufferedMove = playerMoves[i]; // capture compared move to check position
 
                 playerMoves.RemoveRange(0, i + 1); // remove this and all older moves from buffer
-                Debug.Log($"playerMoves.Count: {playerMoves.Count}");
+                //Debug.Log($"playerMoves.Count: {playerMoves.Count}");
 
                 // compare positions
-                transform.position = _correctPosition; // snap correction
-                yVelocity = _correctYVelocity;
-                ResimulateUnprocessedInputs();
-                //Vector3 _difference = _correctPosition - _bufferedMove.state.position;
+                //transform.position = _correctPosition; // snap correction
+                //yVelocity = _correctYVelocity;
+                //ResimulateUnprocessedInputs();
+                Vector3 _difference = _correctPosition - _bufferedMove.state.position;
 
-                //float _distance = _difference.magnitude;
+                float _distance = _difference.magnitude;
 
-                //if (_distance > 1.0f)
-                //{
-                //    //Debug.Log($"Snap Correction, last move processed by server: {_moveId}, buffer moves discarded: {i+1}, buffer moves to resimulate: {playerMoves.Count}");
-                //    transform.position = _correctPosition; // snap correction
-                //    ResimulateUnprocessedInputs();
-                //}
-                //else if (_distance > 0.1f)
-                //{
-                //    // exponentially smoothed moving average correction
-                //}
+                if (_distance > 1.0f)
+                {
+                    //Debug.Log($"Snap Correction to {_correctPosition}, last move processed by server: {_moveId}, buffer moves discarded: {i+1}, buffer moves to resimulate: {playerMoves.Count}");
+                    transform.position = _correctPosition; // snap correction
+                    yVelocity = _correctYVelocity;
+                    ResimulateUnprocessedInputs(_moveId);
+                }
+                else if (_distance > 0.1f)
+                {
+                    // exponentially smoothed moving average correction
+                }
 
                 break;
             }
         }
     }
 
-    private void ResimulateUnprocessedInputs()
+    private void ResimulateUnprocessedInputs(long _afterId)
     {
         for (int j = 0; j < playerMoves.Count; j++)
         {
-            Debug.Log(j);
-            PredictMovement(ProcessInput(playerMoves[j]), charController.isGrounded, playerMoves[j].input.jump);
+            if (_afterId < playerMoves[j].id)
+                PredictMovement(ProcessInput(playerMoves[j]), playerMoves[j].state.isGrounded, playerMoves[j].input.jump);
         }
     }
 }

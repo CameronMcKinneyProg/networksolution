@@ -79,6 +79,7 @@ public class PlayerManager : MonoBehaviour
     {
         model.enabled = true;
         transform.position = new Vector3(0f, 5f, 0f);
+        //Debug.Log(transform.position);
         SetHealth(maxHealth);
     }
 }
